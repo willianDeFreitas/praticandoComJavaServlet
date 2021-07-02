@@ -21,5 +21,7 @@ public class OlaMundoServlet extends HttpServlet{
 		out.println("<h1>Will Karioca</h1>");
 		out.println("</body>");
 		out.println("</html>");
+		
+		System.out.println("servlet chamado");
 	}
 }
