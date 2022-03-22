@@ -14,7 +14,7 @@ import br.com.will.gerenciador.modelo.Empresa;
 
 public class NovaEmpresa {
 	
-	public void executa(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public String executa(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String nomeEmpresa = request.getParameter("nomeEmpresa");
 		String dataAbertura = request.getParameter("dataAbertura");
 		
@@ -35,7 +35,7 @@ public class NovaEmpresa {
 		
 		request.setAttribute("nomeEmpresa", empresa.getNome());
 		
-		response.sendRedirect("entrada?acao=ListaEmpresas");		
+		return "redirect:entrada?acao=ListaEmpresas";		
 	}
 
 }
