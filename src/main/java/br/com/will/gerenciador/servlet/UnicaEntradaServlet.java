@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.will.gerenciador.acao.Acao;
 import br.com.will.gerenciador.acao.AlteraEmpresa;
 import br.com.will.gerenciador.acao.ListaEmpresas;
 import br.com.will.gerenciador.acao.MostraEmpresa;
@@ -23,26 +24,17 @@ public class UnicaEntradaServlet extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String paramAcao = request.getParameter("acao");
-		String nome = "";
 		
-		if (paramAcao.equals("ListaEmpresas")) {
-			ListaEmpresas listaEmpresas = new ListaEmpresas();
-			nome = listaEmpresas.executa(request, response);
-		} else if (paramAcao.equals("RemoveEmpresa")) {
-			RemoveEmpresa removeEmpresa = new RemoveEmpresa();
-			nome = removeEmpresa.executa(request, response);
-		} else if (paramAcao.equals("MostraEmpresa")) {
-			MostraEmpresa mostraEmpresa = new MostraEmpresa();
-			nome = mostraEmpresa.executa(request, response);
-		} else if (paramAcao.equals("AlteraEmpresa")) {
-			AlteraEmpresa alteraEmpresa = new AlteraEmpresa();
-			nome = alteraEmpresa.executa(request, response);
-		} else if (paramAcao.equals("NovaEmpresa")) {
-			NovaEmpresa novaEmpresa = new NovaEmpresa();
-			nome = novaEmpresa.executa(request, response);
-		} else if (paramAcao.equals("NovaEmpresaForm")) {
-			NovaEmpresaForm novaEmpresaForm = new NovaEmpresaForm();
-			nome = novaEmpresaForm.executa(request, response);
+		String nomeDaClasse = "br.com.will.gerenciador.acao." + paramAcao;
+		
+		String nome;
+		try {
+			Class classe = Class.forName(nomeDaClasse);//carrega a classe com o nome
+			Acao acao = (Acao) classe.newInstance();
+			nome = acao.executa(request, response);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ServletException
+				| IOException e) {
+			throw new ServletException(e);
 		}
 		
 		String[] tipoEEndereco = nome.split(":");
@@ -52,6 +44,28 @@ public class UnicaEntradaServlet extends HttpServlet {
 		} else {
 			response.sendRedirect(tipoEEndereco[1]);
 		}
+		
+//		if (paramAcao.equals("ListaEmpresas")) {
+//			ListaEmpresas listaEmpresas = new ListaEmpresas();
+//			nome = listaEmpresas.executa(request, response);
+//		} else if (paramAcao.equals("RemoveEmpresa")) {
+//			RemoveEmpresa removeEmpresa = new RemoveEmpresa();
+//			nome = removeEmpresa.executa(request, response);
+//		} else if (paramAcao.equals("MostraEmpresa")) {
+//			MostraEmpresa mostraEmpresa = new MostraEmpresa();
+//			nome = mostraEmpresa.executa(request, response);
+//		} else if (paramAcao.equals("AlteraEmpresa")) {
+//			AlteraEmpresa alteraEmpresa = new AlteraEmpresa();
+//			nome = alteraEmpresa.executa(request, response);
+//		} else if (paramAcao.equals("NovaEmpresa")) {
+//			NovaEmpresa novaEmpresa = new NovaEmpresa();
+//			nome = novaEmpresa.executa(request, response);
+//		} else if (paramAcao.equals("NovaEmpresaForm")) {
+//			NovaEmpresaForm novaEmpresaForm = new NovaEmpresaForm();
+//			nome = novaEmpresaForm.executa(request, response);
+//		}
+		
+		
 		
 	}
 
